@@ -11,8 +11,8 @@ namespace LComplete.Framework.Cache
 
         public static ICache CreateDefault()
         {
-            CacheConfig config = CacheConfig.GetInstance();
-            string cacheProvider = config != null ? (config.CacheProvider ?? string.Empty) : string.Empty;
+            CacheSetting setting = CacheSetting.GetInstance();
+            string cacheProvider = setting != null ? (setting.CacheProvider ?? string.Empty) : string.Empty;
             ICache cache = null;
 
             if (!DictCacheProviders.TryGetValue(cacheProvider, out cache))
