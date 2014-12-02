@@ -75,6 +75,7 @@
     <Compile Include="Http\RequestParameter.cs" />
     <Compile Include="Http\RequestParameterComparer.cs" />
     <Compile Include="Http\RequestUtils.cs" />
+    <Compile Include="Http\WebPageUtils.cs" />
     <Compile Include="Logging\DebugLogFactory.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Logging\ILog.cs" />
