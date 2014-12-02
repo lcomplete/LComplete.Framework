@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,12 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbConnectionStrings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="TestDbContext.cs" />
     <Compile Include="UserInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\core\Dapper\LComplete.Framework.Dapper.csproj">
+      <Project>{835287bf-6c29-4f63-9483-5a1758a8f90a}</Project>
+      <Name>LComplete.Framework.Dapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\core\EF\LComplete.Framework.EF.csproj">
       <Project>{0a85257a-0836-4397-940d-1304debb3fae}</Project>
       <Name>LComplete.Framework.EF</Name>

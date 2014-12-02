@@ -8,14 +8,14 @@ using LComplete.Framework.Data;
 
 namespace LComplete.Framework.EF
 {
-    public partial class BaseRepository<TEntities, T> : IRepository<T> where TEntities:DbContext, new() where T:class 
+    public partial class BaseRepository<TActiveContext, T> : IRepository<T> where TActiveContext:DbContext, new() where T:class 
     {
         public BaseRepository()
         {
-            this.ActiveContext = new TEntities();
+            this.ActiveContext = new TActiveContext();
         }
 
-        public TEntities ActiveContext { get; private set; }
+        public TActiveContext ActiveContext { get; private set; }
 
         private DbSet<T> _set;
 

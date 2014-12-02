@@ -13,6 +13,11 @@ namespace LComplete.Framework.Site.DateAccess
     {
         public TestDbContext() : base("TestDb") { }
 
+        static TestDbContext()
+        {
+            Database.SetInitializer<TestDbContext>(null);
+        }
+
         public DbSet<UserInfo> UserInfos { get; set; }
     }
 }

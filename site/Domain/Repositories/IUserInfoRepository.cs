@@ -10,5 +10,12 @@ namespace LComplete.Framework.Site.Domain.Repositories
 {
     public interface IUserInfoRepository:IRepository<UserInfo>
     {
+        UserInfo GetUserInfoBySqlHelper();
+
+        UserInfo GetUserInfoByEFSql();
+
+        UserInfo GetUserInfoByDapper();
+
+        UserInfo GetUserInfo();
     }
 }
