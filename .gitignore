@@ -105,7 +105,6 @@ csx
 AppPackages/
 
 # Others
-sql/
 ClientBin/
 [Ss]tyle[Cc]op.*
 ~$*
