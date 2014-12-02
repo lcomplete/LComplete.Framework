@@ -7,7 +7,7 @@ namespace LComplete.Framework.Web
 {
     public class BaseHttpApplication:HttpApplication
     {
-        static BaseHttpApplication()
+        protected virtual void Application_Start()
         {
             #region 依赖解析器
 

@@ -39,13 +39,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Users.cs" />
+    <Compile Include="Model\Generate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Generate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\UserInfo.cs">
+      <DependentUpon>Generate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IUserInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enum\" />
     <Folder Include="QueryCondition\" />
     <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\Framework\LComplete.Framework.csproj">
+      <Project>{9bac8fe2-d996-4746-bd28-f2d0439da8b7}</Project>
+      <Name>LComplete.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Model\DbHelper.ttinclude" />
+    <None Include="Model\Generate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Generate.cs</LastGenOutput>
+    </None>
+    <None Include="Model\manager.ttinclude" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

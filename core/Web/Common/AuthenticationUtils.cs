@@ -6,13 +6,18 @@ namespace LComplete.Framework.Web.Common
 {
     public static class AuthenticationUtils
     {
+        /// <summary>
+        /// 设置登陆cookie
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="createPersistentCookie"></param>
+        /// <param name="userId"></param>
         public static void SetAuthCookie(string username, bool createPersistentCookie, int userId)
         {
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, username, DateTime.Now,
-                                                                             DateTime.Now.AddMinutes(
-                                                                                 FormsAuthentication.Timeout.
-                                                                                     TotalMinutes),
-                                                                             createPersistentCookie, userId.ToString());
+            var ticket = new FormsAuthenticationTicket(1, username, DateTime.Now,
+                DateTime.Now.AddMinutes(
+                    FormsAuthentication.Timeout.TotalMinutes),
+                createPersistentCookie, userId.ToString());
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName);
             cookie.Value = FormsAuthentication.Encrypt(ticket);
             cookie.HttpOnly = true;

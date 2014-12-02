@@ -10,22 +10,29 @@ namespace LComplete.Framework.Data
     public partial interface IRepository<T> : IQueryable<T>
     {
         /// <summary>
-        /// Specifies the related objects to include in the query results.
+        /// 指定关联对象 加载到结果集中
         /// </summary>
-        /// <param name="subSelector">Identifies the field or property to be retrieved. 
-        /// If the expression does not identify a field or property that represents a one-to-one or one-to-many relationship, an exception is thrown.</param>
-        /// <returns>A new System.Linq.IQueryable&lt;T&gt; with the defined query path.</returns>
-        /// <remarks>You cannot specify the loading of two levels of relationships (for example, Orders.OrderDetails).</remarks>
+        /// <param name="subSelector">关联对象</param>
+        /// <returns>System.Linq.IQueryable&lt;T&gt; 包含指定的关联对象.</returns>
+        /// <remarks>可以指定对象关系 (for example, Orders.OrderDetails).</remarks>
         IQueryable<T> Include(Expression<Func<T, object>> subSelector);
 
+        /// <summary>
+        /// 将对象添加到数据库
+        /// </summary>
+        /// <param name="item"></param>
         void Add(T item);
 
+        /// <summary>
+        /// 将对象从数据库中移除
+        /// </summary>
+        /// <param name="item"></param>
         void Remove(T item);
 
         /// <summary>
         /// 更新非持久化对象
         /// </summary>
-        /// <param name="item">An instance containing updated state</param>
+        /// <param name="item">需要更新的对象</param>
         void Update(T item);
 
         /// <summary>

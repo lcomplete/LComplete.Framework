@@ -7,7 +7,11 @@ namespace LComplete.Framework.Cache
     {
         private static string CachePrefix
         {
-            get { return ConfigurationManager.AppSettings["CachePrefix"] ?? string.Empty; }
+            get
+            {
+                CacheSetting setting = CacheSetting.GetInstance();
+                return setting != null ? (setting.CachePrefix ?? string.Empty) : string.Empty;
+            }
         }
 
         private static string WrapKey(string key)

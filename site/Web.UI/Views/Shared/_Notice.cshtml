@@ -1,0 +1,22 @@
+﻿@using LComplete.Framework.Web.Mvc
+@model IList<NotificationMessage>
+
+@helper GetStateName(NotificationType noticeType)
+{
+    switch (noticeType)
+    {
+        case NotificationType.Info:
+    <text>info</text>break;
+        case NotificationType.Error:
+    <text>danger</text>break;
+        case NotificationType.Warning:
+    <text>warning</text>break;
+        case NotificationType.Success:
+    <text>success</text>break;
+    }
+}
+
+@foreach (NotificationMessage notificationMessage in Model)
+{
+    <div class="notice-@GetStateName(notificationMessage.NotificationType)">@notificationMessage.Message</div>
+}

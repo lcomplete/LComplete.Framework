@@ -44,6 +44,7 @@
     <Compile Include="BaseHttpApplication.cs" />
     <Compile Include="Common\AuthenticationUtils.cs" />
     <Compile Include="Common\RequestUrlUtils.cs" />
+    <Compile Include="Mvc\BaseController.cs" />
     <Compile Include="Mvc\NotificationExtensions.cs" />
     <Compile Include="Mvc\DependencyResolver.cs" />
     <Compile Include="Mvc\NotificationManager.cs" />

@@ -61,7 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacchingAopConfig.cs" />
+    <Compile Include="CachingAopConfig.cs" />
     <Compile Include="CachingAttribute.cs" />
     <Compile Include="CachingInterceptor.cs" />
     <Compile Include="DefaultCacheKeyGenerator.cs" />

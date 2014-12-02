@@ -73,7 +73,7 @@ namespace LComplete.Framework.Setting
 
         private static string GetFilePath(Type type)
         {
-            return GetFileDir() + type.Name + ".setting";
+            return GetFileDir() + type.Name + ".config";
         }
 
         private static string GetFileDir()
