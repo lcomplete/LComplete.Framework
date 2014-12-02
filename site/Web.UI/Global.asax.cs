@@ -17,6 +17,8 @@ namespace LComplete.Framework.Site.Web.UI
     {
         protected override void Application_Start()
         {
+            LogManager.LogFactory = new Log4NetFactory(Server.MapPath("log4net.config"));
+
             base.Application_Start();
 
             AreaRegistration.RegisterAllAreas();
@@ -25,8 +27,6 @@ namespace LComplete.Framework.Site.Web.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            LogManager.LogFactory = new Log4NetFactory("log4net.config");
 
             // 配置缓存拦截器
             if (ConfigurationManager.AppSettings["CacheAop_Assembles"] != null)
