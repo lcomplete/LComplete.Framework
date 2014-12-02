@@ -1,5 +1,8 @@
 ﻿@using System.Web.UI.WebControls
+@using LComplete.Framework.Data
 @using LComplete.Framework.Web.Extensions
+@using LComplete.Framework.Web.Mvc
+
 @model dynamic
 
 @{
@@ -11,3 +14,5 @@
 @Html.ShowNotice()
 
 @ViewBag.CurrentTime
+
+@Html.NumericPager(new PagingModel(2,10,2000))
