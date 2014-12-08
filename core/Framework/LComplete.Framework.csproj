@@ -48,7 +48,7 @@
     <Compile Include="Cache\WebCache.cs" />
     <Compile Include="Common\CycleRefrenceRemover.cs" />
     <Compile Include="Common\EncryptUtils.cs" />
-    <Compile Include="Common\OrmUtils.cs" />
+    <Compile Include="Data\OrmUtils.cs" />
     <Compile Include="Common\ReflectHelper.cs" />
     <Compile Include="Common\StreamUtils.cs" />
     <Compile Include="Common\StringParseUtils.cs" />
@@ -65,6 +65,7 @@
     <Compile Include="Data\SqlHelper.cs" />
     <Compile Include="Exceptions\DataAlreadyExistsException.cs" />
     <Compile Include="Exceptions\VerifyException.cs" />
+    <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="FluentEmail\DefaultTemplateRender.cs" />
     <Compile Include="FluentEmail\Email.cs" />
     <Compile Include="FluentEmail\IHideObjectMembers.cs" />

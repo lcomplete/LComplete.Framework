@@ -5,7 +5,7 @@ using LComplete.Framework.DependencyResolution;
 
 namespace LComplete.Framework.Web.Mvc
 {
-    public class ContainerDependencyResolver:IDependencyResolver
+    public class ContainerDependencyResolver : IDependencyResolver
     {
         private IObjectContainer _objectContainer;
 
@@ -16,14 +16,13 @@ namespace LComplete.Framework.Web.Mvc
 
         public object GetService(Type serviceType)
         {
-            try
+            if (serviceType.IsSubclassOf(typeof(Controller)))
             {
                 return _objectContainer.Resolve(serviceType);
             }
-            catch
-            {
-                return null;
-            }
+
+            object result = _objectContainer.TryResolve(serviceType);
+            return result;
         }
 
         public IEnumerable<object> GetServices(Type serviceType)

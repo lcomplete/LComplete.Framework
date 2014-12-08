@@ -11,6 +11,8 @@ namespace LComplete.Framework.DependencyResolution
         object Resolve(Type modelType);
         IList<object> ResolveAll(Type modelType);
 
+        object TryResolve(Type modelType);
+
         void Register(Type typeFor, Type typeUse);
         void Register(Type typeFor, object instance);
 

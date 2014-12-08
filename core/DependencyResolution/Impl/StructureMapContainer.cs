@@ -10,7 +10,6 @@ namespace LComplete.Framework.DependencyResolution.Impl
 {
     internal class StructureMapContainer : IObjectContainer
     {
-
         public T Resolve<T>()
         {
             EnsureDependenciesRegistered();
@@ -27,6 +26,12 @@ namespace LComplete.Framework.DependencyResolution.Impl
         {
             EnsureDependenciesRegistered();
             return (IList<object>)ObjectFactory.GetAllInstances(modelType);
+        }
+
+        public object TryResolve(Type modelType)
+        {
+            EnsureDependenciesRegistered();
+            return ObjectFactory.TryGetInstance(modelType);
         }
 
         public void Register(Type typeFor, Type typeUse)
