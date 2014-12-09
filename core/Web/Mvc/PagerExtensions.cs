@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
@@ -8,6 +9,42 @@ using LComplete.Framework.Web.Common;
 
 namespace LComplete.Framework.Web.Mvc
 {
+    /// <summary>
+    /// 分页视图模型
+    /// </summary>
+    public class PageViewModel
+    {
+        public PageUrl FirstPageUrl { get; set; }
+
+        public PageUrl PrevPageUrl { get; set; }
+
+        public PageUrl NextPageUrl { get; set; }
+
+        public PageUrl LastPageUrl { get; set; }
+
+        public int PageCount { get; set; }
+
+        public int RecordCount { get; set; }
+
+        public int PageSize { get; set; }
+
+        public int PageLinkCount { get; set; }
+
+        public PageUrl CurrentPageUrl { get; set; }
+
+        public IList<PageUrl> RenderPageUrls { get; set; }
+    }
+
+    /// <summary>
+    /// 分页链接
+    /// </summary>
+    public class PageUrl
+    {
+        public int PageIndex { get; set; }
+
+        public string Url { get; set; }
+    }
+
     /// <summary>
     /// 提供一组用于分页的扩展方法。
     /// </summary>
@@ -23,6 +60,19 @@ namespace LComplete.Framework.Web.Mvc
         public static MvcHtmlString Pager(this HtmlHelper htmlHelper, PagingModel pagedEntity)
         {
             return GeneratePagerHtml(htmlHelper, htmlHelper.ViewContext.RequestContext, pagedEntity);
+        }
+
+        private static string GeneratePagingLink(bool hasLink, string linkUrl, string linkText)
+        {
+            if (hasLink)
+                return string.Format("<a href=\"{0}\">{1}</a>", linkUrl, linkText);
+            else
+                return string.Format("<span class=\"nopaging\">{0}</span>", linkText);
+        }
+
+        private static string GeneratePagingLinkUrl(RequestContext context, int page)
+        {
+            return RequestUrlUtils.CombinationRequestUrl(context, PAGE_INDEX_NAME, page.ToString());
         }
 
         private static MvcHtmlString GeneratePagerHtml(HtmlHelper htmlHelper, RequestContext context, PagingModel pagedEntity)
@@ -60,98 +110,170 @@ namespace LComplete.Framework.Web.Mvc
             return MvcHtmlString.Create(html.ToString());
         }
 
-
-        public static MvcHtmlString NumericPager(this HtmlHelper htmlHelper, PagingModel pagedEntity)
-        {
-            return GenerateNumericPagerHtml(htmlHelper, pagedEntity);
-        }
-
-        private static MvcHtmlString GenerateNumericPagerHtml(HtmlHelper html, PagingModel pagedEntity)
+        /// <summary>
+        /// 获取分页视图模型
+        /// </summary>
+        /// <param name="viewContext"></param>
+        /// <param name="pagedEntity"></param>
+        /// <param name="pageLinkCount"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static PageViewModel GetPageViewModel(ViewContext viewContext, PagingModel pagedEntity, int pageLinkCount)
         {
             if (pagedEntity == null)
                 throw new ArgumentNullException("pagedEntity");
 
-            var queryString = html.ViewContext.HttpContext.Request.QueryString;
-            int currentPage = pagedEntity.PageIndex; //当前页
-            var totalPages = Math.Max((pagedEntity.RecordCount + pagedEntity.PageSize - 1) / pagedEntity.PageSize, 1); //总页数
-            var dict = new RouteValueDictionary(html.ViewContext.RouteData.Values);
+            var pageCount = Math.Max((pagedEntity.RecordCount + pagedEntity.PageSize - 1) / pagedEntity.PageSize, 1); //总页数
+            PageViewModel pageView = new PageViewModel()
+            {
+                PageCount = pageCount,
+                PageSize = pagedEntity.PageSize,
+                PageLinkCount = pageLinkCount,
+                RecordCount = pagedEntity.RecordCount,
+                CurrentPageUrl = GetPageUrl(viewContext, pagedEntity.PageIndex),
+                FirstPageUrl = GetPageUrl(viewContext, 1),
+                LastPageUrl = GetPageUrl(viewContext, pageCount),
+                PrevPageUrl = GetPageUrl(viewContext, pagedEntity.PageIndex - 1),
+                NextPageUrl = pageCount > pagedEntity.PageIndex ? GetPageUrl(viewContext, pagedEntity.PageIndex + 1) : null,
+                RenderPageUrls = new List<PageUrl>()
+            };
 
-            var output = new StringBuilder();
+            int currentPage = pagedEntity.PageIndex;
+            int lowOrderIndex = currentPage - pageLinkCount / 2;
+            int upOrderIndex = lowOrderIndex + pageLinkCount - 1;
+            int lowBoundPage = Math.Max(1, lowOrderIndex);
+            int upBoundPage = Math.Min(pageCount, upOrderIndex);
+            if (lowOrderIndex < 1)
+            {
+                upBoundPage = Math.Min(pageCount, pageLinkCount);
+            }
+            if (upOrderIndex > pageCount)
+            {
+                lowBoundPage = Math.Max(1, pageCount - pageLinkCount + 1);
+            }
 
+            for (int i = lowBoundPage; i <= upBoundPage; i++)
+            {
+                pageView.RenderPageUrls.Add(GetPageUrl(viewContext, i));
+            }
+
+            return pageView;
+        }
+
+        /// <summary>
+        /// 获取分页url
+        /// </summary>
+        /// <param name="viewContext"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        private static PageUrl GetPageUrl(ViewContext viewContext, int pageIndex)
+        {
+            if (pageIndex < 1)
+                return null;
+
+            var queryString = viewContext.HttpContext.Request.QueryString;
+            var dictRouteValues = new RouteValueDictionary(viewContext.RouteData.Values);
             foreach (string key in queryString.Keys)
                 if (queryString[key] != null && !string.IsNullOrEmpty(key))
-                    dict[key] = queryString[key];
+                    dictRouteValues[key] = queryString[key];
+            dictRouteValues[PAGE_INDEX_NAME] = pageIndex;
+
+            return new PageUrl()
+            {
+                PageIndex = pageIndex,
+                Url =
+                    UrlHelper.GenerateUrl(null, null, null, dictRouteValues, RouteTable.Routes,
+                        viewContext.RequestContext, true)
+            };
+        }
+
+
+        /// <summary>
+        /// 生成分页链接UI
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="pagedEntity"></param>
+        /// <param name="alwaysShow">不管总页数，每次都显示</param>
+        /// <param name="pageLinkCount">显示链接数量</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static MvcHtmlString NumericPager(this HtmlHelper html, PagingModel pagedEntity, bool alwaysShow = true, int pageLinkCount = 10)
+        {
+            if (pagedEntity == null)
+                throw new ArgumentNullException("pagedEntity");
+
+            PageViewModel pageView = GetPageViewModel(html.ViewContext, pagedEntity, pageLinkCount);
+
+            if (pageView.PageCount > 1 || alwaysShow)
+            {
+                const string pagerPartialView = "_Pager";
+                if (ViewEngines.Engines.FindPartialView(html.ViewContext, pagerPartialView).View != null)
+                {
+                    return html.Partial("_Pager", pageView);
+                }
+
+                return GenerateDefaultPagerUI(html, pageView, alwaysShow);
+            }
+
+            return new MvcHtmlString("");
+        }
+
+        private static MvcHtmlString GenerateDefaultPagerUI(HtmlHelper html, PageViewModel pageView, bool alwaysShow)
+        {
+            var output = new StringBuilder();
 
             const string emptyLinkFormat = "<a href=\"javascript:;\">{0}</a>";
-            if (totalPages > 1)
+            if (pageView.PageCount > 1 || alwaysShow)
             {
+                int currentPage = pageView.CurrentPageUrl.PageIndex;
                 output.Append("<div class=\"pagination pagination-right\"><ul>");
 
                 if (currentPage != 1)
                 {
                     //处理首页连接
-                    dict[PAGE_INDEX_NAME] = 1;
-                    AppendLinkItem(output, html.RouteLink("首页", dict).ToString());
+                    AppendLinkItem(output, string.Format("<a href=\"{0}\">首页</a>", pageView.FirstPageUrl.Url));
                 }
                 if (currentPage > 1)
                 {
                     //处理上一页的连接
-                    dict[PAGE_INDEX_NAME] = currentPage - 1;
-                    AppendLinkItem(output, html.RouteLink("上一页", dict).ToString());
+                    AppendLinkItem(output, string.Format("<a href=\"{0}\">上一页</a>", pageView.PrevPageUrl.Url));
                 }
                 else
                 {
                     AppendLinkItem(output, string.Format(emptyLinkFormat, "上一页"), "disabled");
                 }
 
-                const int showPageIndex = 10;
-                int lowOrderIndex = currentPage - showPageIndex / 2 + 1;
-                int upOrderIndex = currentPage + showPageIndex / 2;
-                int lowBoundPage = Math.Max(1, lowOrderIndex);
-                int upBoundPage = Math.Min(totalPages, upOrderIndex);
-                if (lowOrderIndex < 1)
+                for (int i = 0; i < pageView.RenderPageUrls.Count; i++)
                 {
-                    upBoundPage = Math.Min(totalPages, upBoundPage + (showPageIndex / 2 - currentPage));
-                }
-                if (upOrderIndex > totalPages)
-                {
-                    lowBoundPage = Math.Max(1, lowBoundPage - showPageIndex / 2);
-                }
-
-
-
-                for (int i = lowBoundPage; i <= upBoundPage; i++)
-                {
-                    if (i == currentPage)
+                    if (pageView.RenderPageUrls[i].PageIndex == currentPage)
                     {
                         AppendLinkItem(output, string.Format(emptyLinkFormat, currentPage.ToString()), "active");
                     }
                     else
                     {
-                        dict[PAGE_INDEX_NAME] = i;
-                        AppendLinkItem(output, html.RouteLink(i.ToString(), dict).ToString());
+                        AppendLinkItem(output,
+                            string.Format("<a href=\"{0}\">{1}</a>", pageView.RenderPageUrls[i].Url,
+                                pageView.RenderPageUrls[i].PageIndex));
                     }
                 }
 
-                if (currentPage < totalPages)
+                if (currentPage < pageView.PageCount)
                 {
                     //处理下一页的链接
-                    dict[PAGE_INDEX_NAME] = currentPage + 1;
-                    AppendLinkItem(output, html.RouteLink("下一页", dict).ToString());
+                    AppendLinkItem(output, string.Format("<a href=\"{0}\">下一页</a>", pageView.NextPageUrl.Url));
                 }
                 else
                 {
                     AppendLinkItem(output, string.Format(emptyLinkFormat, "下一页"), "disabled");
                 }
-                if (currentPage != totalPages)
+                if (currentPage != pageView.PageCount)
                 {
-                    dict[PAGE_INDEX_NAME] = totalPages;
-                    AppendLinkItem(output, html.RouteLink("末页", dict).ToString());
+                    AppendLinkItem(output, string.Format("<a href=\"{0}\">末页</a>", pageView.LastPageUrl.Url));
                 }
                 output.Append("</ul>");
                 output.AppendFormat("<div class=\"pull-left\">第 {0}/{1} 页，每页 {2} 条，共 {3} 条</div>", currentPage,
-                                    totalPages, pagedEntity.PageSize,
-                                    pagedEntity.RecordCount);
+                                    pageView.PageCount, pageView.PageSize,
+                                    pageView.RecordCount);
                 output.Append("</div>");
             }
 
@@ -162,19 +284,6 @@ namespace LComplete.Framework.Web.Mvc
         {
             output.AppendFormat("<li{0}>{1}</li>",
                                 string.IsNullOrWhiteSpace(className) ? "" : " class=\"" + className + "\"", link);
-        }
-
-        private static string GeneratePagingLink(bool hasLink, string linkUrl, string linkText)
-        {
-            if (hasLink)
-                return string.Format("<a href=\"{0}\">{1}</a>", linkUrl, linkText);
-            else
-                return string.Format("<span class=\"nopaging\">{0}</span>", linkText);
-        }
-
-        private static string GeneratePagingLinkUrl(RequestContext context, int page)
-        {
-            return RequestUrlUtils.CombinationRequestUrl(context, PAGE_INDEX_NAME, page.ToString());
         }
     }
 }

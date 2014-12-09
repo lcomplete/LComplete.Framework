@@ -1,0 +1,52 @@
+﻿@using LComplete.Framework.Web.Mvc
+@model PageViewModel
+
+<div class="page tac">
+    @if (Model.FirstPageUrl.PageIndex == Model.CurrentPageUrl.PageIndex)
+    {
+        <a href="javascript:;" class="prev disabled">首页</a>
+    }
+    else
+    {
+        <a href="@Model.FirstPageUrl.Url" class="prev">首页</a>
+    }
+
+    @if (Model.PrevPageUrl != null)
+    {
+        <a href="@Model.PrevPageUrl.Url" class="prev">上一页</a>
+    }
+    else
+    {
+        <a href="javascript:;" class="prev disabled">上一页</a>
+    }
+
+    @foreach (PageUrl page in Model.RenderPageUrls)
+    {
+        if (page.PageIndex == Model.CurrentPageUrl.PageIndex)
+        {
+        <a href="@page.Url" class="num cur">@page.PageIndex</a>
+        }
+        else
+        {
+        <a href="@page.Url" class="num">@page.PageIndex</a>
+        }
+    }
+
+    @if (Model.NextPageUrl != null)
+    {
+        <a href="@Model.NextPageUrl.Url" class="next">下一页</a>
+    }
+    else
+    {
+        <a href="javascript:;" class="next disabled">下一页</a>
+    }
+
+    @if (Model.LastPageUrl.PageIndex == Model.CurrentPageUrl.PageIndex)
+    {
+        <a href="javascript:;" class="next disabled">尾页</a>
+    }
+    else
+    {
+        <a href="@Model.LastPageUrl.Url" class="next">尾页</a>
+    }
+</div>
