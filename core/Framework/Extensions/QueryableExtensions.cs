@@ -28,5 +28,19 @@ namespace LComplete.Framework.Extensions
 
             return querySource;
         }
+
+        /// <summary>
+        /// 当objCompare不为null时才应用predicate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="querySource"></param>
+        /// <param name="predicate"></param>
+        /// <param name="objCompare"></param>
+        /// <returns></returns>
+        public static IQueryable<T> WhereWhenNotNull<T>(this IQueryable<T> querySource,
+            Expression<Func<T, bool>> predicate, object objCompare)
+        {
+            return WhereCondition(querySource, predicate, objCompare != null);
+        }
     }
 }
