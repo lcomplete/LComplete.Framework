@@ -16,7 +16,7 @@ namespace LComplete.Framework.Data
                 {
                     if (!reader.IsDBNull(i))
                     {
-                        ReflectHelper.SetPropertyValue(entity, reader.GetName(i), reader.GetValue(i));
+                        ReflectUtils.SetPropertyValue(entity, reader.GetName(i), reader.GetValue(i));
                     }
                 }
                 return entity;

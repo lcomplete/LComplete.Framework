@@ -7,7 +7,7 @@ namespace LComplete.Framework.Data
     /// </summary>
     public class OrderPagingQuery<TModel>:PagingQuery where TModel:class 
     {
-        public OrderFieldStore<TModel> OrderFieldStore { get; private set; }
+        public OrderFieldStore<TModel> OrderFieldStore { get; set; }
 
         private string _o;
 

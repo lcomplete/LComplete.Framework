@@ -48,8 +48,10 @@
     <Compile Include="Cache\WebCache.cs" />
     <Compile Include="Common\CycleRefrenceRemover.cs" />
     <Compile Include="Common\EncryptUtils.cs" />
+    <Compile Include="Common\ExpressionUtils.cs" />
+    <Compile Include="Data\OrderFieldStore.cs" />
     <Compile Include="Data\OrmUtils.cs" />
-    <Compile Include="Common\ReflectHelper.cs" />
+    <Compile Include="Common\ReflectUtils.cs" />
     <Compile Include="Common\StreamUtils.cs" />
     <Compile Include="Common\StringParseUtils.cs" />
     <Compile Include="Common\StringUtils.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Data\OrderField.cs" />
     <Compile Include="Data\OrderPagingQuery.cs" />
     <Compile Include="Data\PagingDataSource.cs" />
+    <Compile Include="Data\PagingDataSourceExtension.cs" />
     <Compile Include="Data\PagingModel.cs" />
     <Compile Include="Data\PagingQuery.cs" />
     <Compile Include="Data\SqlHelper.cs" />
