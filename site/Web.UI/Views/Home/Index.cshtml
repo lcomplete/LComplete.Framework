@@ -1,0 +1,38 @@
+﻿@using LComplete.Framework.Data
+@using LComplete.Framework.Web.Mvc
+@model LComplete.Framework.Data.PagingDataSource<LComplete.Framework.Site.Domain.ViewModel.CustomModel>
+
+@{
+    ViewBag.Title = "list排序测试";
+}
+
+@section styles{
+    <style type="text/css">
+        table{border-collapse: collapse; width:98%;margin: auto;}
+        td{border:1px solid #ccc;}
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table>
+    <tr>
+        <td colspan="4">
+            <a href="@Url.Action("Index", new { Order = Model.OrderFieldStore.MakeOrderFlags(t => t.Id, OrderType.Descending, isOtherUseRawOrder: true) })">按Id倒序</a> 
+<a href="@Url.Action("Index", new { Order = Model.OrderFieldStore.MakeOrderFlags(t => t.Id, OrderType.Descending, isOtherUseRawOrder: false) })">按Id倒序(保留其他条件)</a> 
+<a href="@Url.Action("Index", new { Order = Model.OrderFieldStore.MakeOrderFlags(t => t.Name, OrderType.Descending, isOtherUseRawOrder: false) })">按Name倒序</a> 
+<a href="@Url.Action("Index", new { Order = Model.OrderFieldStore.MakeOrderFlags(t => t.CreateDate, OrderType.Descending, isOtherUseRawOrder: false) })">按CreateDate倒序</a>
+        </td>
+    </tr>
+    @foreach (var custom in Model.DataSource)
+    {
+        <tr>
+            <td>@custom.Id</td>
+            <td>@custom.Name</td>
+            <td>@custom.Title</td>
+            <td>@custom.CreateDate</td>
+        </tr>
+    }
+</table>
+
+@Html.NumericPager(Model)
