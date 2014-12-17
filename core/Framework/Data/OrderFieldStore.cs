@@ -125,10 +125,10 @@ namespace LComplete.Framework.Data
         /// <summary>
         /// 调整排序优先级和排序类型
         /// </summary>
-        /// <param name="o">由.号拼接的数字(数字表示索引:从1开始,-表示倒序)</param>
-        public void ChangeOrderFlags(string o)
+        /// <param name="order">由.号拼接的数字(数字表示索引:从1开始,-表示倒序)</param>
+        public void ChangeOrderFlags(string order)
         {
-            IList<int> orderFlags = StringParseUtils.ParseJoinString(o, '.').Distinct().ToList();
+            IList<int> orderFlags = StringParseUtils.ParseJoinString(order, '.').Distinct().ToList();
             IList<int> changedIndexs = new List<int>();
 
             //设置优先级和排序标识
@@ -174,12 +174,12 @@ namespace LComplete.Framework.Data
         /// </summary>
         /// <param name="fieldExpression">要更改的排序字段的表达式</param>
         /// <param name="orderType">排序类型</param>
-        /// <param name="isKeepOtherOrder">其他字段是否保持原始的排序类型</param>
+        /// <param name="isOtherUseRawOrder">其他字段是否保持原始的排序类型</param>
         /// <returns>字符串形式的排序优先级和标识，需要更改的排序对象的优先级最高</returns>
-        public string MakeOrderFlags(Expression<Func<TModel, object>> fieldExpression, OrderType orderType, bool isKeepOtherOrder = false)
+        public string MakeOrderFlags(Expression<Func<TModel, object>> fieldExpression, OrderType orderType, bool isOtherUseRawOrder = false)
         {
             string orderKey = ExpressionUtils.ParseMemberName(fieldExpression);
-            return MakeOrderFlags(orderKey, orderType, isKeepOtherOrder);
+            return MakeOrderFlags(orderKey, orderType, isOtherUseRawOrder);
         }
 
         /// <summary>
@@ -187,9 +187,9 @@ namespace LComplete.Framework.Data
         /// </summary>
         /// <param name="orderKey">要更改的排序对象的key</param>
         /// <param name="orderType">排序类型</param>
-        /// <param name="isKeepOtherOrder">其他字段是否保持原始的排序类型</param>
+        /// <param name="isOtherUseRawOrder">其他字段是否保持原始的排序类型</param>
         /// <returns>字符串形式的排序优先级和标识，需要更改的排序对象的优先级最高</returns>
-        public string MakeOrderFlags(string orderKey, OrderType orderType, bool isKeepOtherOrder = false)
+        public string MakeOrderFlags(string orderKey, OrderType orderType, bool isOtherUseRawOrder = false)
         {
             IList<int> orderFlags = new List<int>();
             int makeOrderFlag = 0;
@@ -207,7 +207,7 @@ namespace LComplete.Framework.Data
                 else
                 {
                     OrderType otherOrderType = orderField.OrderType;
-                    if (isKeepOtherOrder)
+                    if (isOtherUseRawOrder)
                         otherOrderType = orderField.RawOrderType;
                     if (otherOrderType != OrderType.None)
                         orderFlags.Add(orderField.RawPriorityIndex*(otherOrderType == OrderType.Descending ? -1 : 1));

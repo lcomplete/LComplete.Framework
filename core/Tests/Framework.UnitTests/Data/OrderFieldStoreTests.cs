@@ -68,7 +68,7 @@ namespace LComplete.Framework.UnitTests.Data
             fieldStore.SetOrderField(t => t.Title, OrderType.Descending);
 
             string orderFlags = fieldStore.MakeOrderFlags(t => t.CreateDate, OrderType.Descending,
-                isKeepOtherOrder: true);
+                isOtherUseRawOrder: true);
             Assert.AreEqual("-2.3", orderFlags);
         }
 

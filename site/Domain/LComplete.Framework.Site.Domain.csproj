@@ -48,12 +48,12 @@
       <DependentUpon>Generate.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryCondition\CustomOrderQuery.cs" />
     <Compile Include="Repositories\IUserInfoRepository.cs" />
+    <Compile Include="ViewModel\CustomModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enum\" />
-    <Folder Include="QueryCondition\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\core\Framework\LComplete.Framework.csproj">

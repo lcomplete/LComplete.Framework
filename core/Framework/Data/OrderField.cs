@@ -30,7 +30,10 @@ namespace LComplete.Framework.Data
             OrderType = orderType;
             RawOrderType = orderType;
         }
-
+        
+        /// <summary>
+        /// 成员表达式
+        /// </summary>
         public Expression<Func<TModel, Object>> MemberExpression { get; private set; }
 
         public string OrderKey { get; private set; }

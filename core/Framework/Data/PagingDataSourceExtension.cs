@@ -15,7 +15,7 @@ namespace LComplete.Framework.Data
         /// <param name="pagingQuery"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public static PagingDataSource<T> ToPagingDataSource<T>(this IQueryable<T> queryableSource, PagingQuery pagingQuery, int recordCount = 0)
+        public static PagingDataSource<T> QueryPagingDataSource<T>(this IQueryable<T> queryableSource, PagingQuery pagingQuery, int recordCount = 0) where T : class
         {
             if (recordCount == 0 && pagingQuery.IsGetRecordCount)
                 recordCount = queryableSource.Count();
@@ -33,7 +33,7 @@ namespace LComplete.Framework.Data
         /// <param name="pagingQuery"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public static PagingDataSource<T> ToPagingDataSource<T>(this IQueryable<T> queryableSource, OrderPagingQuery<T> pagingQuery, int recordCount = 0) where T : class
+        public static PagingDataSource<T> QueryPagingDataSource<T>(this IQueryable<T> queryableSource, OrderPagingQuery<T> pagingQuery, int recordCount = 0) where T : class
         {
             if (recordCount == 0 && pagingQuery.IsGetRecordCount)
                 recordCount = queryableSource.Count();
@@ -94,14 +94,35 @@ namespace LComplete.Framework.Data
             return result;
         }
 
-        public static PagingDataSource<T> ToPagingDataSource<T>(this IList<T> dataSource, int pageIndex, int pageSize, int recordCount = 0)
+        /// <summary>
+        /// list 转换为 PagingDataSource
+        /// </summary>
+        /// <returns></returns>
+        public static PagingDataSource<T> ToPagingDataSource<T>(this IList<T> dataSource, int pageIndex, int pageSize, int recordCount = 0) where T : class
         {
             return new PagingDataSource<T>(dataSource, pageIndex, pageSize, recordCount);
         }
 
-        public static PagingDataSource<T> ToPagingDataSource<T>(this IList<T> dataSource, PagingQuery pagingQuery, int recordCount = 0)
+        /// <summary>
+        /// list 转换为 PagingDataSource
+        /// </summary>
+        /// <returns></returns>
+        public static PagingDataSource<T> ToPagingDataSource<T>(this IList<T> dataSource, PagingQuery pagingQuery, int recordCount = 0) where T : class
         {
             return new PagingDataSource<T>(dataSource, pagingQuery.Page, pagingQuery.PageSize, recordCount);
+        }
+
+        /// <summary>
+        /// list 转换为 PagingDataSource
+        /// </summary>
+        /// <returns></returns>
+        private static PagingDataSource<T> ToPagingDataSource<T>(this IList<T> dataSource,
+            OrderPagingQuery<T> orderPagingQuery, int recordCount = 0) where T : class
+        {
+            var pagingData = new PagingDataSource<T>(dataSource, orderPagingQuery.Page, orderPagingQuery.PageSize,
+                recordCount);
+            pagingData.OrderFieldStore = orderPagingQuery.OrderFieldStore;
+            return pagingData;
         }
 
         /// <summary>
@@ -112,17 +133,17 @@ namespace LComplete.Framework.Data
         /// <param name="pagingQuery"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public static PagingDataSource<T> ListToPagingDataSource<T>(this IList<T> listSource, OrderPagingQuery<T> pagingQuery, int recordCount = 0) where T : class
+        public static PagingDataSource<T> ListPagingDataSource<T>(this IList<T> listSource, OrderPagingQuery<T> pagingQuery, int recordCount = 0) where T : class
         {
             if (recordCount == 0 && pagingQuery.IsGetRecordCount)
                 recordCount = listSource.Count();
 
-            IOrderedEnumerable<T> query=null;
+            IOrderedEnumerable<T> query = null;
             foreach (OrderField<T> orderField in pagingQuery.OrderFieldStore.OrderFields)
             {
-                if (orderField.OrderType!=OrderType.None)
+                if (orderField.OrderType != OrderType.None)
                 {
-                    if (query!=null)
+                    if (query != null)
                     {
                         if (orderField.OrderType == OrderType.Ascending)
                         {
