@@ -8,10 +8,18 @@ namespace LComplete.Framework.Common
     {
         public static string Md5(string str)
         {
-            byte[] bytes = Encoding.Default.GetBytes(str);
+            byte[] bytes = Encoding.UTF8.GetBytes(str);
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             byte[] hash = md5.ComputeHash(bytes);
             return BitConverter.ToString(hash).Replace("-", "");
+        }
+
+        public static string Md5_16(string str)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(str);
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] hash = md5.ComputeHash(bytes);
+            return BitConverter.ToString(hash, 4, 8).Replace("-", "");
         }
 
         public static string GenerateSalt()

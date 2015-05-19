@@ -1,0 +1,43 @@
+﻿@model Domain.Model.Auth_User
+
+@{
+    ViewBag.Title = "我的资料";
+}
+
+@section styles{
+    <style type="text/css">
+        .userprofile dd,.userprofile dt {
+            padding: 10px 0;
+        }
+    </style>
+}
+
+<fieldset>
+    <legend>我的资料</legend>
+    <dl class="dl-horizontal userprofile">
+        <dt>用户名：</dt>
+        <dd>@Model.Username</dd>
+        <dt>姓名：</dt>
+        <dd>@(string.IsNullOrEmpty(Model.RealName)?"----":Model.RealName)</dd>
+        <dt>E-mail 地址：</dt>
+        <dd>@(string.IsNullOrEmpty(Model.Email)?"----":Model.Email)</dd>
+        <dt>分组：</dt>
+        <dd>
+            @if(Model.Auth_User_Groups!=null && Model.Auth_User_Groups.Count>0)
+            {
+                foreach (var group in Model.Auth_User_Groups)
+                {
+                    <span class="muted">@group.Auth_Group.Name</span><br/>
+                }
+            }
+            else
+            {
+                @:----
+            }
+        </dd>
+        <dt>加入时间：</dt>
+        <dd>@Model.CreateDate</dd>
+        <dt>最近登录时间：</dt>
+        <dd>@Model.LastLoginDate</dd>
+    </dl>
+</fieldset>

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Snap">
       <HintPath>..\..\packages\SNAP.1.8.2\lib\net40\Snap.dll</HintPath>
     </Reference>
@@ -42,11 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICustomService.cs" />
-    <Compile Include="Impl\CustomService.cs" />
-    <Compile Include="IUserInfoService.cs" />
+    <Compile Include="IAuth_GroupService.cs" />
+    <Compile Include="IAuth_Group_PermissionsService.cs" />
+    <Compile Include="IAuth_UserService.cs" />
+    <Compile Include="IAuth_User_GroupsService.cs" />
+    <Compile Include="Impl\Auth_GroupService.cs" />
+    <Compile Include="Impl\Auth_Group_PermissionsService.cs" />
+    <Compile Include="Impl\Auth_UserService.cs" />
+    <Compile Include="Impl\Auth_User_GroupsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Impl\UserInfoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\core\CacheHandler\LComplete.Framework.CacheHandler.csproj">
@@ -62,7 +69,10 @@
       <Name>LComplete.Framework.Site.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

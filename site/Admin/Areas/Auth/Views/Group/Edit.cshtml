@@ -1,0 +1,92 @@
+﻿@using Admin.Extensions
+@using LComplete.Framework.Web.Auth
+@model Domain.Model.Auth_Group
+
+@helper hasPermission(FunctionComponent function){
+    if(Model!=null && Model.Auth_Group_Permissions.Count(t=>t.PermissionKey==function.FunctionKey)>0)
+    {
+@:selected="selected"
+    }
+}
+@helper RenderOptions(FunctionComponent functionGroup){
+    if (functionGroup.ChildFunctionItems != null && functionGroup.ChildFunctionItems.Count > 0)
+    {
+        <optgroup label="@functionGroup.Name">
+            @foreach (var secondFunction in functionGroup.ChildFunctionItems)
+            {
+                <option value="@secondFunction.FunctionKey" @hasPermission(secondFunction)>@secondFunction.Name</option>
+                if(secondFunction.ChildFunctionItems!=null)
+                {
+                    foreach (var leapFunction in secondFunction.ChildFunctionItems)
+                    {
+                        <option value="@leapFunction.FunctionKey" @hasPermission(leapFunction)>&nbsp;&nbsp;&nbsp;&nbsp;@leapFunction.Name</option>
+                    }
+                }
+            }
+        </optgroup>
+    }
+    else
+    {
+        <option value="@functionGroup.FunctionKey" @hasPermission(functionGroup)>@functionGroup.Name</option>
+    }
+}
+@section styles{
+    @Styles.Render("~/content/plugin/multiSelect/css")
+    <style type="text/css">
+        .ms-container { background-position: 263px 200px !important; }
+        .ms-list{ width: 250px !important;height: 420px !important;}
+    </style>
+}
+@section scripts{
+    @Scripts.Render("~/scripts/multiSelect")
+    <script type="text/javascript">
+        $("#Permissions").multiSelect({
+            selectableOptgroup: true,
+            selectableHeader:"<a class='block-heading custom-header' href='javascript:;'>可用权限</a>",
+            selectionHeader: "<a class='block-heading custom-header' href='javascript:;'>已选权限</a>"
+        });
+    </script>
+}
+
+@Html.ShowNotice()
+
+<div class="well">
+    <form method="POST" class="form-horizontal">
+        <fieldset>
+            <legend>@(Model==null||Model.Id==0?"新增分组":"编辑分组")</legend>
+            @using (Html.ControlGroupFor(t=>t.Name))
+            {
+                @Html.LabelFor(t=>t.Name,new{@class="control-label"})
+                <div class="controls">
+                    @Html.TextBoxFor(t=>t.Name,new{@class="input-xlarge"})
+                    @Html.ValidationMessageFor(t=>t.Name,null,new{@class="help-block"})
+                </div>
+            }
+            <div class="control-group">
+                <label class="control-label">权限</label>
+                <div class="controls">
+                    <select multiple="multiple" id="Permissions" name="Permissions">
+                        @foreach (var functionGroup in FunctionTable.Functions.FunctionGroup)
+                        {
+                            @RenderOptions(functionGroup)
+                        }
+                    </select>
+                </div>
+            </div>
+            @if(Model!=null && Model.Id>0)
+            {
+                <div class="control-group">
+                    @Html.LabelFor(t=>t.CreateDate,new{@class="control-label"})
+                    <div class="controls">
+                        @Html.TextBoxFor(t=>t.CreateDate,new{@class="input-xlarge",@readonly="readonly"})
+                    </div>
+                </div>
+            }
+            
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit"><i class="icon-save"></i> 保存</button>
+            </div>
+        </fieldset>
+    
+    </form>
+</div>

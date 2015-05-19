@@ -1,0 +1,81 @@
+﻿@{
+}
+
+@section scripts{
+    @*登陆后显示loading画面*@
+    @if (0>1 && TempData.ContainsKey("JustLogin") && Request.UrlReferrer!=null && Request.UrlReferrer.LocalPath.StartsWith("/login",StringComparison.OrdinalIgnoreCase))
+    {
+        <script type="text/javascript">
+            function loadingIt() {
+                var $wrapper = $("#wrapper-placeholder").hide();
+                var $loading_wrapper = $("#loading-placeholder").height($(window).height()).show();
+                var $text = $("<p>").addClass("vertical").text("loading");
+                var $tip = $("#loading-tip").addClass("animated wiggle");
+
+                var fullWidth = $(window).width();
+                var fullHeight = $(window).height();
+                var fallCount = 15;
+                var fallOrder = [];
+                var fallIndex = 0;
+                for (var i = 0; i < fallCount; i++) {
+                    fallOrder[i] = i;
+                }
+                for (i = 0; i < 100; i++) {
+                    var a = parseInt(Math.random() * (fallCount-1));
+                    var b = parseInt(Math.random() * (fallCount-1));
+                    var temp = fallOrder[a];
+                    fallOrder[a] = fallOrder[b];
+                    fallOrder[b] = temp;
+                }
+
+                function fallBlock() {
+                    i = fallOrder[fallIndex];
+                    var startPix = fullWidth * (i / (fallCount + 1));
+                    var endPix = fullWidth * ((i + 1) / (fallCount + 1));
+                    var rndPix = startPix + (endPix - startPix) * Math.random();
+                    var $block = $text.clone().css("left", rndPix);
+                    $loading_wrapper.append($block);
+                    $block.animate({ "top": fullHeight - 100, "opacity": 0 }, (0.5 + Math.random() / 2) * 3000);
+                    fallIndex++;
+                    if (fallIndex <= fallCount)
+                        setTimeout(fallBlock, (0.5 + Math.random() / 2) * 400);
+                    else
+                        flipIt();
+                }
+
+                function flipIt() {
+                    var $loaded = $("<p>").addClass("horizontal").text("loaded");
+                    $loading_wrapper.append($loaded);
+                    $loaded.addClass("animated lightSpeedIn");
+                    setTimeout(function() {
+                        var $copyLoaded = $loaded.clone();
+                        $($loading_wrapper).append($copyLoaded);
+                        $copyLoaded.addClass("animated lightSpeedIn");
+                    }, 30);
+                    $tip.fadeOut(300);
+                    setTimeout(normalIt, 1900);
+                }
+
+                function normalIt() {
+                    $loading_wrapper.fadeOut(1500);
+                    $wrapper.show().addClass("animated flipOutY");
+                }
+
+                fallBlock();
+            }
+
+            loadingIt();
+        </script>
+
+        TempData.Remove("JustLogin");
+    }
+}
+
+<div class="row-fluid">
+
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>提示：</strong> 欢迎进入后台管理系统！
+    </div>
+
+</div>

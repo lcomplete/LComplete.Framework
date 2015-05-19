@@ -44,23 +44,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseHttpApplication.cs" />
+    <Compile Include="AppConfigureExtension.cs" />
+    <Compile Include="Auth\ActionExpressionParser.cs" />
+    <Compile Include="Auth\ActionIdentity.cs" />
+    <Compile Include="Auth\FunctionComponent.cs" />
+    <Compile Include="Auth\FunctionComposite.cs" />
+    <Compile Include="Auth\Functions.cs" />
+    <Compile Include="Auth\FunctionTable.cs" />
     <Compile Include="Common\AuthenticationUtils.cs" />
     <Compile Include="Common\RequestUrlUtils.cs" />
+    <Compile Include="Common\UrlUtils.cs" />
     <Compile Include="Mvc\BaseController.cs" />
+    <Compile Include="Mvc\ContainerDependencyResolver.cs" />
     <Compile Include="Mvc\NotificationExtensions.cs" />
-    <Compile Include="Mvc\DependencyResolver.cs" />
     <Compile Include="Mvc\NotificationManager.cs" />
     <Compile Include="Mvc\NotificationMessage.cs" />
     <Compile Include="Mvc\NotificationType.cs" />
     <Compile Include="Mvc\PagerExtensions.cs" />
+    <Compile Include="Mvc\SelectItemUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DependencyResolution\LComplete.Framework.DependencyResolution.csproj">
-      <Project>{4336ca76-5cad-4a6b-bbb2-33db03dff7bd}</Project>
-      <Name>LComplete.Framework.DependencyResolution</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Framework\LComplete.Framework.csproj">
       <Project>{9bac8fe2-d996-4746-bd28-f2d0439da8b7}</Project>
       <Name>LComplete.Framework</Name>

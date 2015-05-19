@@ -1,0 +1,267 @@
+﻿@using Admin.Extensions
+@using LComplete.Framework.Web.Auth
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title - 网站后台管理</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="sft">
+
+    @Styles.Render("~/Content/theme/css/all")
+    <style type="text/css">
+        #line-chart {
+            height:300px;
+            width:800px;
+            margin: 0px auto;
+            margin-top: 1em;
+        }
+        .brand { font-family: georgia, serif; }
+        .brand .first {
+            color: #ccc;
+            font-style: italic;
+        }
+        .brand .second {
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+    @RenderSection("styles", false)
+
+    @*<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->*@
+
+    <!-- Le fav and touch icons -->
+    @*<link rel="shortcut icon" href="../assets/ico/favicon.ico">*@
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> 
+  <body class=""> 
+  <!--<![endif]-->
+    <div id="wrapper-placeholder">
+        
+        <div class="navbar">
+            <div class="navbar-inner">
+                <ul class="nav pull-right">
+                    
+                    <li><a href="@Url.Action("ChangePassword", "Account", new { area = "" })" class="hidden-phone visible-tablet visible-desktop" role="button">设置</a></li>
+                    <li id="fat-menu" class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> @User.Identity.Name
+                            <i class="icon-caret-down"></i>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" href="@Url.Action("Index", "Account", new { area = "" })">我的资料</a></li>
+                            <li class="divider"></li>
+                            <li><a tabindex="-1" href="@Url.Action("Index", "Logout", new { area = "" })">注销</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+                <a class="brand" href="@Url.Action("Index", "Home")"><span class="first">网站</span> <span class="second">后台管理</span></a>
+            </div>
+        </div>
+
+    
+        <div class="sidebar-nav">
+            @for (int i = 0; i < FunctionTable.Functions.FunctionGroup.Count; i++)
+            {
+                FunctionComponent groupFunction = FunctionTable.Functions.FunctionGroup[i];
+                //是否分组权限
+                bool hasGroupPermission = groupFunction.FunctionKey != null && ViewContext.Controller.HasPermission(groupFunction.FunctionKey);
+                //是否具有分组或任一子功能的权限
+                bool hasAnyPermission = hasGroupPermission || ViewContext.Controller.HasAnyPermission(groupFunction.ChildFunctionItems);
+
+                if (hasAnyPermission && groupFunction.IsShowOnNav)
+                {
+                    //分组有链接 则输出链接
+                    if (hasGroupPermission)
+                    {
+                        <a href="@Url.Action(groupFunction.ActionName, groupFunction.ControllerName, new { area = groupFunction.AreaName })" class="nav-header">
+                            <i class="@groupFunction.IconClass"></i>@groupFunction.Name
+                        </a>
+                    }
+                    else //输出文本
+                    {
+                        <a href="#child-menu@(i)" class="nav-header" data-toggle="collapse"><i class="@groupFunction.IconClass"></i>@groupFunction.Name</a>
+                    }
+                    //输出子功能导航
+                    if (groupFunction.ChildFunctionItems != null && groupFunction.ChildFunctionItems.Any(t=>t.IsShowOnNav))
+                    {
+                        <ul id="child-menu@(i)" class="nav nav-list in collapse">
+                            @foreach (FunctionComponent func in groupFunction.ChildFunctionItems)
+                            {
+                                if (func.IsShowOnNav && ViewContext.Controller.HasPermission(func.FunctionKey))
+                                {
+                                    string style= (ViewContext.RouteData.Values["Controller"].ToString()+ViewContext.RouteData.Values["Action"].ToString()) == func.ControllerName+func.ActionName ?"background:#e0e0e8;":"";
+                                    <li>@Html.ActionLink(func.Name, func.ActionName, func.ControllerName, new { area = func.AreaName }, new{style})</li>
+                                }
+                            }
+                        </ul>
+                    }
+                }
+            }
+
+        </div>
+    
+
+    
+        <div class="content">
+                
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index", "Home", new { area = "" })">首页</a> <span class="divider">/</span></li>
+                @if (ViewContext.Controller.GetCurrentFunction() != null)
+                {
+                    @makeBread(ViewContext.Controller.GetCurrentFunction().ParentFunction)
+                }
+                <li class="active">@ViewBag.Title</li>
+            </ul>
+
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    @RenderBody()
+                    
+                    @*<footer>
+                        <hr>
+                        <p class="pull-right">A <a href="http://www.portnine.com/bootstrap-themes" target="_blank">Free Bootstrap Theme</a> by <a href="http://www.portnine.com" target="_blank">Portnine</a></p>
+
+                        <p>&copy; 2013 <a href="/" target="_blank">18</a></p>
+                    </footer>*@
+                    
+                </div>
+            </div>
+        
+            
+
+        </div>
+    </div>
+      
+    <div id="loading-placeholder"><p class="horizontal" id="loading-tip">loading</p></div>
+     
+      @Scripts.Render("~/Scripts/jquery", "~/scripts/bootstrap","~/Scripts/bt")
+    <script type="text/javascript">
+        $(".datepicker").datepicker({ language: "zh-CN", format: 'yyyy-mm-dd' });
+
+        $(".search-well button").click(function() {
+            var $start = $("#StartDate");
+            var $end = $("#EndDate");
+            var valid = true;
+            if (!!$start && !!$end) {
+                var arrStart = $start.val().split("-");
+                var arrEnd = $end.val().split("-");
+                if (arrStart.length == 3 && arrEnd.length == 3) {
+                    var startDate = new Date(arrStart[0], arrStart[1], arrStart[2]);
+                    var endDate = new Date(arrEnd[0], arrEnd[1], arrEnd[2]);
+                    if (startDate > endDate) {
+                        alert("起始时间不能大于截止时间，请重新选择。");
+                        valid = false;
+                    }
+                } else {
+                    alert("日期选取有误，请重新选择。");
+                    valid = false;
+                }
+            }
+
+            return valid;
+        });
+
+        $.fn.bootstrapTable.defaults.formatSearch = function() {
+            return '在当前表格内搜索';
+        };
+        $.fn.bootstrapTable.defaults.formatNoMatches = function() {
+            return '未找到匹配的记录';
+        };
+        var $table = $(".well table");
+
+        var reportUtils = {
+            "writeCookie": function(name, value, hours) {
+                var expire = "";
+                if (!!hours && hours > 0) {
+                    expire = new Date(new Date().getTime() + hours * 3600000);
+                    expire = "; expires=" + expire.toGMTString();
+                }
+                document.cookie = name + "=" + escape(value) + expire + "; path=/";
+            },
+            "readCookie": function(name) {
+                var cookieValue = "";
+                var search = name + "=";
+                if (document.cookie.length > 0) {
+                    var offset = document.cookie.indexOf(search);
+                    if (offset != -1) {
+                        offset += search.length;
+                        var end = document.cookie.indexOf(";", offset);
+                        if (end == -1) end = document.cookie.length;
+                        cookieValue = unescape(document.cookie.substring(offset, end));
+                    }
+                }
+                return cookieValue;
+            }
+        };
+        var table_cookie_name = "_tab_style";
+        var tab_style = reportUtils.readCookie(table_cookie_name);
+        var default_text = '<i class="icon-columns"></i> 宽松模式';
+        var beautiful_text = '<i class="icon-list"></i> 拥挤模式';
+        var btn_text = default_text;
+        if (tab_style == "1") {
+            btn_text = beautiful_text;
+        }
+        $table.before('<div id="tab_toolbar"><button id="button" class="btn btn-default" onclick="changeTabStyle(this)">' + btn_text + '</button></div>');
+
+        function changeTabStyle(target) {
+            if ($(target).html() == default_text) {
+                $(target).html(beautiful_text);
+                beautifulTable();
+                reportUtils.writeCookie(table_cookie_name, "1");
+            } else {
+                reportUtils.writeCookie(table_cookie_name, "0");
+                location.href = location.href;
+            }
+        }
+
+        function beautifulTable() {
+            $table.bootstrapTable({
+                height: $table.height() + 20 < 500 ? 500 : $table.height() + 20,
+                showColumns: true,
+                search: true,
+                toolbar: "#tab_toolbar"
+                //showExport:true
+            });
+        }
+
+        if (tab_style == "1") {
+            beautifulTable();
+        }
+    </script>
+      @RenderSection("scripts", required: false)
+      
+      <!--发布时移除 -->
+      @*<script src="http://stat.18.net/stat?siteid=1" type="text/javascript"></script>*@
+  </body>
+</html>
+
+@helper makeBread(FunctionComponent function)
+{
+    if (function != null)
+    {
+        if (function.ParentFunction != null)
+        {
+            @makeBread(function.ParentFunction)
+        }
+        if (function.HasUrl)
+        {
+            <li><a href="@Url.Action(function.ActionName, function.ControllerName, new { area = function.AreaName })">@function.Name</a> <span class="divider">/</span></li>
+        }
+        else
+        {
+            <li><span class="muted">@function.Name</span> <span class="divider">/</span></li>
+        }
+    }
+}

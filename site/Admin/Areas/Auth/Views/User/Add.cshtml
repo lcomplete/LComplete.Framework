@@ -1,0 +1,40 @@
+﻿@using Admin.Extensions
+@model Admin.Areas.Auth.Models.NewUserViewModel
+
+@Html.ShowNotice()
+
+<div class="well">
+    <form method="POST" class="form-horizontal">
+        <fieldset>
+            <legend>新增用户</legend>
+            <div class="control-group @Html.ValidateCssFor("Username")">
+                <label class="control-label" for="Username">用户名：</label>
+                <div class="controls">
+                    <input type="text" class="input-xlarge" id="Username" name="Username" value="@(Model!=null?Model.Username:"")" />
+                    <p class="help-block">必填，请输入3-30个字母或数字的组合</p>
+                </div>
+            </div>
+            <div class="control-group @Html.ValidateCssFor("Password")">
+                <label class="control-label" for="Password">密码：</label>
+                <div class="controls">
+                    <input type="password" class="input-xlarge" id="Password" name="Password" />
+                    <p class="help-block">请输入4-20个字符</p>
+                </div>
+            </div>
+            <div class="control-group @Html.ValidateCssFor("ConfirmPassword")">
+                <label class="control-label" for="ConfirmPassword">密码确认：</label>
+                <div class="controls">
+                    <input type="password" class="input-xlarge" id="ConfirmPassword" name="ConfirmPassword" />
+                    <p class="help-block">@Html.ValidationMessageFor(t=>t.ConfirmPassword)</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit"><i class="icon-save"></i> 保存</button>
+            </div>
+        </fieldset>
+    
+    </form>
+     
+
+</div>
+

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using LComplete.Framework.Web.Mvc;
 
-namespace LComplete.Framework.Web.Extensions
+namespace LComplete.Framework.Web.Mvc
 {
     public static class NotificationExtensions
     {

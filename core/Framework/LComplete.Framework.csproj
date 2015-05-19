@@ -33,6 +33,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,14 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BootConfigure.cs" />
     <Compile Include="Cache\CacheFactory.cs" />
     <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\CacheSetting.cs" />
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Cache\WebCache.cs" />
     <Compile Include="Common\CycleRefrenceRemover.cs" />
+    <Compile Include="Common\DateTimeUtils.cs" />
     <Compile Include="Common\EncryptUtils.cs" />
     <Compile Include="Common\ExpressionUtils.cs" />
+    <Compile Include="Common\FileUtils.cs" />
+    <Compile Include="Common\ImageUtils.cs" />
+    <Compile Include="Common\IpUtils.cs" />
+    <Compile Include="Common\RandomUtils.cs" />
+    <Compile Include="Data\CommonQuery\DateRangeQuery.cs" />
+    <Compile Include="Data\CommonQuery\IDateRangeQuery.cs" />
     <Compile Include="Data\OrderFieldStore.cs" />
     <Compile Include="Data\OrmUtils.cs" />
     <Compile Include="Common\ReflectUtils.cs" />
@@ -65,8 +75,10 @@
     <Compile Include="Data\PagingDataSourceExtension.cs" />
     <Compile Include="Data\PagingModel.cs" />
     <Compile Include="Data\PagingQuery.cs" />
+    <Compile Include="Data\SqlBuildHelper.cs" />
     <Compile Include="Data\SqlHelper.cs" />
     <Compile Include="Exceptions\DataAlreadyExistsException.cs" />
+    <Compile Include="Exceptions\UnAcceptOperationException.cs" />
     <Compile Include="Exceptions\VerifyException.cs" />
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="FluentEmail\DefaultTemplateRender.cs" />
@@ -80,18 +92,25 @@
     <Compile Include="Http\RequestParameterComparer.cs" />
     <Compile Include="Http\RequestUtils.cs" />
     <Compile Include="Http\WebPageUtils.cs" />
+    <Compile Include="IoC\ContainerManager.cs" />
+    <Compile Include="IoC\IContainer.cs" />
+    <Compile Include="IoC\IContainerFactory.cs" />
     <Compile Include="Logging\DebugLogFactory.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\ILogFactory.cs" />
     <Compile Include="Logging\LogManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\DataResult.cs" />
+    <Compile Include="Results\ResultBase.cs" />
     <Compile Include="Setting\AppSetting.cs" />
     <Compile Include="Setting\CustomSetting.cs" />
     <Compile Include="Setting\DynamicSetting.cs" />
     <Compile Include="Setting\ISetting.cs" />
+    <Compile Include="Tools\ImageTool.cs" />
     <Compile Include="Verify\IDCardVerify.cs" />
     <Compile Include="Verify\VerifyUtils.cs" />
+    <Compile Include="Wcf\WcfClientManager.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

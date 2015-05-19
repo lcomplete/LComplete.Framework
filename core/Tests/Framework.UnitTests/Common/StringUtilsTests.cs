@@ -18,5 +18,6 @@ namespace LComplete.Framework.UnitTests.Common
             string truncateStr = StringUtils.TruncateWidth(str, 14);
             Assert.AreEqual(8, truncateStr.Length);
         }
+
     }
 }

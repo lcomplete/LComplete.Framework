@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using NewProject.Site.Filters;
 
 namespace LComplete.Framework.Site.Web.UI
 {
@@ -7,6 +8,7 @@ namespace LComplete.Framework.Site.Web.UI
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new CdnDomainFilterAttribute());
         }
     }
 }

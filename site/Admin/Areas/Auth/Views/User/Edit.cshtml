@@ -1,0 +1,100 @@
+﻿@using Admin.Extensions
+@model Admin.Areas.Auth.Models.EditUserViewModel
+
+@Html.ShowNotice()
+
+<div class="well">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#home" data-toggle="tab">用户资料</a></li>
+      <li><a href="#profile" data-toggle="tab">修改密码</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane active in" id="home">
+            <form method="POST" class="form-horizontal">
+                <div class="control-group  @Html.ValidateCssFor("Username")">
+                    <label class="control-label" for="Username">用户名：</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="Username" name="Username" value="@(Model.Username)" />
+                        <p class="help-block">必填，请输入3-30个字母或数字的组合</p>
+                    </div>
+                </div>
+                <div class="control-group  @Html.ValidateCssFor("RealName")">
+                    <label class="control-label" for="RealName">姓名：</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="RealName" name="RealName" value="@(Model.RealName)" />
+                        <p class="help-block">必填，请输入2-20个字符</p>
+                    </div>
+                </div>
+                <div class="control-group  @Html.ValidateCssFor("Email")">
+                    <label class="control-label" for="Email">E-mail 地址：</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="Email" name="Email" value="@(Model.Email)" />
+                        <p class="help-block">请输入邮件地址</p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="SelectGroupIds">分组：</label>
+                    <div class="controls">
+                        @Html.ListBoxFor(t=>t.SelectGroupIds,Model.Auth_Groups.Select(t=>new SelectListItem()
+                                                                                            {
+                                                                                                Value = t.Id.ToString(),
+                                                                                                Text = t.Name,
+                                                                                                Selected = Model.SelectGroupIds.Contains(t.Id)
+                                                                                            }))
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="IsEnabled">启用：</label>
+                    <div class="controls">
+                        @Html.CheckBoxFor(t=>t.IsEnabled)
+                    </div>
+                </div>              
+                <div class="control-group">
+                    <label class="control-label" for="IsSuperUser">超级管理员：</label>
+                    <div class="controls">
+                        @Html.CheckBoxFor(t=>t.IsSuperUser)
+                    </div>
+                </div> 
+                <div class="control-group">
+                    <label class="control-label" for="LastLoginDate">最后登录时间：</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="LastLoginDate" name="LastLoginDate" value="@(Model.LastLoginDate)" readonly="readonly" />
+                    </div>
+                </div> 
+                <div class="control-group">
+                    <label class="control-label" for="CreateDate">创建时间：</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="CreateDate" name="CreateDate" value="@(Model.CreateDate)" readonly="readonly" />
+                    </div>
+                </div> 
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="icon-save"></i> 保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="profile">
+            <form class="form-horizontal" method="POST" action="@Url.Action("ChangePassword")">
+                @Html.HiddenFor(t=>t.Id)
+                <div class="control-group">
+                    <label class="control-label" for="Password">密码：</label>
+                    <div class="controls">
+                        <input type="password" class="input-xlarge" id="Password" name="Password" />
+                        <p class="help-block">请输入4-20个字符</p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="ConfirmPassword">密码确认：</label>
+                    <div class="controls">
+                        <input type="password" class="input-xlarge" id="ConfirmPassword" name="ConfirmPassword" />
+                        <p class="help-block">请输入与上面相同的密码</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="icon-save"></i> 修改</button>
+                </div>
+            </form>
+        </div>
+
+  </div>
+
+</div>

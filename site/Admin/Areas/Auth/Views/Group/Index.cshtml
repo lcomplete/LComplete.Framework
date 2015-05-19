@@ -1,0 +1,54 @@
+﻿@model IList<Domain.Model.Auth_Group>
+
+@section styles{
+    <style type="text/css">
+        form { margin: 0; }
+    </style>
+}
+
+@Html.ShowNotice()
+
+<div class="btn-toolbar">
+    <a href="@Url.Action("Edit")" class="btn btn-primary"><i class="icon-plus"></i> 新增分组</a>
+</div>
+
+<div class="well">
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>分组名</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model!=null)
+            {
+                foreach (var group in Model)
+                {
+                    <tr>
+                        <td><a href="@Url.Action("Edit",new{id=group.Id})">@group.Name</a></td>
+                        <td>
+                            @using(Html.BeginForm("Delete","Group"))
+                            {
+                                @Html.Hidden("Id",group.Id)
+                                <a href="#" data-action="delete"><i class="icon-remove"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $("a[data-action=delete]").click(function (e) {
+            e.preventDefault();
+            if(confirm("你确定要删除吗？")) {
+                $(this).closest("form").submit();
+            }
+        });
+    </script>
+}

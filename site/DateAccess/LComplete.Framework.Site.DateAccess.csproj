@@ -47,17 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbConnectionStrings.cs" />
+    <Compile Include="MainDbContext.cs" />
+    <Compile Include="Mapping\Auth_Group_PermissionsMap.cs" />
+    <Compile Include="Mapping\Auth_User_GroupsMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Auth_GroupRepository.cs" />
+    <Compile Include="Repositories\Auth_Group_PermissionsRepository.cs" />
+    <Compile Include="Repositories\Auth_UserRepository.cs" />
+    <Compile Include="Repositories\Auth_User_GroupsRepository.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="TestDbContext.cs" />
-    <Compile Include="UserInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\core\Dapper\LComplete.Framework.Dapper.csproj">
-      <Project>{835287bf-6c29-4f63-9483-5a1758a8f90a}</Project>
-      <Name>LComplete.Framework.Dapper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\core\EF\LComplete.Framework.EF.csproj">
       <Project>{0a85257a-0836-4397-940d-1304debb3fae}</Project>
       <Name>LComplete.Framework.EF</Name>

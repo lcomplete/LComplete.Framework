@@ -1,0 +1,27 @@
+﻿@model IList<NotificationMessage>
+
+@helper  GetCssName(NotificationType noticeType){
+    switch (noticeType)
+    {
+        case NotificationType.Info:
+@:info
+            break;
+        case NotificationType.Error:
+@:error
+            break;
+        case NotificationType.Warning:
+@:warning
+            break;
+        case NotificationType.Success:
+@:success
+            break;
+    }
+}
+
+@foreach (NotificationMessage notificationMessage in Model)
+{
+    <div class="alert alert-@GetCssName(notificationMessage.NotificationType)">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @notificationMessage.Message
+    </div>
+}

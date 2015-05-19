@@ -1,17 +1,13 @@
-Ôªøusing System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LComplete.Framework.Exceptions
 {
     /// <summary>
-    /// Êï∞ÊçÆÂ∑≤Â≠òÂú®ÂºÇÂ∏∏
+    ///  ˝æ›÷ÿ∏¥“Ï≥£
     /// </summary>
     [Serializable]
-    public class DataAlreadyExistsException : VerifyException
+    public class DataAlreadyExistsException : System.Exception
     {
         //
         // For guidelines regarding the creation of new exception types, see
@@ -28,7 +24,7 @@ namespace LComplete.Framework.Exceptions
         {
         }
 
-        public DataAlreadyExistsException(string message, Exception inner) : base(message, inner)
+        public DataAlreadyExistsException(string message, System.Exception inner) : base(message, inner)
         {
         }
 
