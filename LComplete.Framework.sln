@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LComplete.Framework", "core\Framework\LComplete.Framework.csproj", "{9BAC8FE2-D996-4746-BD28-F2D0439DA8B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{E1BEE0EA-5485-45CC-9D59-7357F702C073}"
@@ -49,6 +51,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D96A7C
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{1416B0C0-F625-4D9B-BD1D-9E860F74A4DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "tools\CodeGenerator\CodeGenerator.csproj", "{90F25568-87A9-4195-A91E-3F4FCE9F469C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +134,10 @@ Global
 		{1315073A-04CF-47A7-BFEE-388D48B135A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1315073A-04CF-47A7-BFEE-388D48B135A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1315073A-04CF-47A7-BFEE-388D48B135A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F25568-87A9-4195-A91E-3F4FCE9F469C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F25568-87A9-4195-A91E-3F4FCE9F469C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F25568-87A9-4195-A91E-3F4FCE9F469C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F25568-87A9-4195-A91E-3F4FCE9F469C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,5 +162,6 @@ Global
 		{1315073A-04CF-47A7-BFEE-388D48B135A7} = {A525BDDB-6922-4B44-9FAB-87FE9763E747}
 		{A3428A79-8100-47B9-AC42-A98543D8FBEC} = {EDEB9528-D0CB-41FF-B651-89176528FB59}
 		{C7C1DB6E-0F28-40EC-8365-A4593CA8CE90} = {868768BC-50F1-43CA-B33D-9A69AC20A177}
+		{90F25568-87A9-4195-A91E-3F4FCE9F469C} = {1416B0C0-F625-4D9B-BD1D-9E860F74A4DF}
 	EndGlobalSection
 EndGlobal
