@@ -1,0 +1,96 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ assembly name="System.Data.DataSetExtensions.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ include file="..\DbHelper.ttinclude"  #>
+<#@ include file="..\Manager.ttinclude"#>
+<# var manager = Manager.Create(Host, GenerationEnvironment);
+	foreach(string tableName in config.TableNames.Split(',')){
+	   #>
+<# manager.StartNewFile("Services\\I"+tableName+"Service.cs"); #>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace Services
+{	
+	public interface <#="I"+tableName+"Service"#>
+    {
+      
+    }
+}
+
+<# manager.EndBlock(); #>
+
+<# manager.StartNewFile("Services\\Impl\\"+tableName+"Service.cs"); #>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace Services.Impl
+{	
+	public class <#=tableName+"Service"#> : <#="I"+tableName+"Service"#>
+    {
+      
+    }
+}
+
+<# manager.EndBlock(); #>
+
+<# manager.StartNewFile("Repositories\\I"+tableName+"Repository.cs"); #>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Zxly.FlowStat.Domain.Model;
+using Zxly.Core.Data;
+
+namespace Zxly.FlowStat.Domain.Repositories
+{	
+	public interface <#="I"+tableName+"Repository"#> : IRepository<<#=tableName #>>
+    {
+      
+    }
+}
+
+<# manager.EndBlock(); #>
+
+<# manager.StartNewFile("Repositories\\Impl\\"+tableName+"Repository.cs"); #>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Zxly.FlowStat.Domain.Model;
+using Zxly.FlowStat.Domain.Repositories;
+
+namespace Zxly.FlowStat.DataAccess.Repositories
+{	
+	public class <#=tableName+"Repository"#> : Repository<<#=tableName #>>, <#="I"+tableName+"Repository"#>
+    {
+      
+    }
+}
+
+<# manager.EndBlock(); #>
+
+
+<#}#>
+
+<# manager.Process(true); #>
+
+
+<#+
+	public class config
+	{
+		public static readonly string ConnectionString=@"Data Source=192.168.1.211;Initial Catalog=FlowStat;uid=zxly_dev;pwd=zxly1q2w3e4r5t";
+		public static readonly string DbDatabase="[FlowStat]";
+		public static readonly string TableNames="SessionRegister,UniqueVisitor,VisitLog,VisitorSession,Website,SitePageModuleMapping,IpMap,UserTotalData,UserDayData";
+	}
+#>
